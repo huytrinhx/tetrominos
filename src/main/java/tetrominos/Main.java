@@ -35,13 +35,13 @@ class Tetrominos {
 				int key = e.getKeyCode();
 				//System.out.println("key pressed " + e.getKeyCode());
 				if(key == KeyEvent.VK_A) {
-					board.rotateLeft();
+					board.getActivePiece().rotateLeft();
 				} else if (key == KeyEvent.VK_D) {
-					board.rotateRight();
+					board.getActivePiece().rotateRight();
 				} else if (key == KeyEvent.VK_LEFT) {
-					board.slide(-1);
+					board.getActivePiece().slide(-1);
 				}  else if (key == KeyEvent.VK_RIGHT) {
-					board.slide(1);
+					board.getActivePiece().slide(1);
 				}
 			}
 
