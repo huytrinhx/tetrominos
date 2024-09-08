@@ -12,16 +12,8 @@ class Block {
         return color;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
     public Position getPosition() {
         return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
     }
 
     public static Color[] colors = { Color.red, Color.blue, Color.magenta,
