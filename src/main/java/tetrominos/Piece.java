@@ -3,7 +3,6 @@ package tetrominos;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
-import java.util.*;
 
 public class Piece {
     private Color color;
