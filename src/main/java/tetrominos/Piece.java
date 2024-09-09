@@ -32,7 +32,7 @@ public class Piece {
     public Piece(Block[] blocks) {
         this.blocks = blocks;
         retrieveBoundary();
-        
+
     }
 
     public void draw(Graphics g, int scale) {
@@ -121,42 +121,44 @@ public class Piece {
     public int[][] getCurrentCordinates() {
         int[][] output = new int[4][2];
         for (int i = 0; i < 4; i++) {
-            output[i][0]= blocks[i].getPosition().x;
-            output[i][1]= blocks[i].getPosition().y
-;        }
+            output[i][0] = blocks[i].getPosition().x;
+            output[i][1] = blocks[i].getPosition().y;
+        }
         return output;
     }
 
     public void rotateLeft() {
         System.out.println("Rotate left. 90 degree counter-clockwise.");
-        rotate(-Math.PI/2);
+        rotate(-Math.PI / 2);
     }
 
     public void rotateRight() {
         System.out.println("\"Rotate right. 90 degree clockwise.\"");
-        rotate(Math.PI/2);
+        rotate(Math.PI / 2);
     }
 
     private void rotate(double theta) {
-        //Since we're using a non-standard left-handed Cartesian coordinate system
-        //meaning x is directed to the right, but y is directed down
-        //Positive theta means clockwise rotation
-        //And negative theta means counter-clockwise rotation
-        double[][] rotationMatrix = {{Math.cos(theta), -Math.sin(theta)}, {Math.sin(theta), Math.cos(theta)}};
+        // Since we're using a non-standard left-handed Cartesian coordinate system
+        // meaning x is directed to the right, but y is directed down
+        // Positive theta means clockwise rotation
+        // And negative theta means counter-clockwise rotation
+        double[][] rotationMatrix = { { Math.cos(theta), -Math.sin(theta) }, { Math.sin(theta), Math.cos(theta) } };
         int[][] translated = new int[4][2];
         int[][] rotated = new int[4][2];
         Block[] newPiece = new Block[4];
 
         // Offset the coordinates of all blocks by min X and min Y
         // This will effectively set the top left block to (0, 0) position - our origin
-        for (int i=0; i< blocks.length; i++) {
+        for (int i = 0; i < blocks.length; i++) {
             translated[i] = new int[] { blocks[i].getPosition().x - minX,
                     (blocks[i].getPosition().y - minY) };
         }
         // Apply rotation
-        for (int i=0; i< translated.length; i++) {
-            rotated[i][0] = (int)Math.round(translated[i][0] * rotationMatrix[0][0] + translated[i][1] * rotationMatrix[0][1]);
-            rotated[i][1] = (int)Math.round(translated[i][0] * rotationMatrix[1][0] + translated[i][1] * rotationMatrix[1][1]);
+        for (int i = 0; i < translated.length; i++) {
+            rotated[i][0] = (int) Math
+                    .round(translated[i][0] * rotationMatrix[0][0] + translated[i][1] * rotationMatrix[0][1]);
+            rotated[i][1] = (int) Math
+                    .round(translated[i][0] * rotationMatrix[1][0] + translated[i][1] * rotationMatrix[1][1]);
 
         }
         // Generate new blocks

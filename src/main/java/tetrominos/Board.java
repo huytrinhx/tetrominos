@@ -6,14 +6,18 @@ import java.awt.Graphics;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.swing.Timer;
+import javax.swing.JFrame;
 import javax.swing.JComponent;
+import java.awt.event.*;
 
-class Board extends JComponent {
+class Board extends JFrame {
 
     private static final int SCALE = 32; // number of pixels per square
     private int cols;
     private int rows;
     private Piece activePiece;
+    private JComponent component;
 
     public Piece getActivePiece() {
         return activePiece;
@@ -53,27 +57,75 @@ class Board extends JComponent {
     }
 
     public Board(int cols, int rows) {
-        super();
+        super("Playing...");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.component = new JComponent() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, getWidth(), getHeight());
+                Board.this.activePiece.draw(g, SCALE);
+                for (Block b : Board.this.settledBlocks) {
+                    b.draw(g, SCALE);
+                }
+            }
+        };
+        component.setPreferredSize(new Dimension(cols * SCALE, rows * SCALE));
+        setContentPane(component);
+        setLocationRelativeTo(null); // Center the frame
+        setLocation(getX() - (cols * SCALE) / 2, getY() - (rows * SCALE) / 2);
+        pack();
+        setResizable(true);
+        setVisible(true);
+
         this.cols = cols;
         this.rows = rows;
-        setPreferredSize(new Dimension(cols * SCALE, rows * SCALE));
         initializeBoardStates();
         this.activePiece = new Piece();
         this.settledBlocks = new ArrayList<Block>();
+        startTimerAndListen();
+    }
+
+    private void startTimerAndListen() {
+        Timer timer = new Timer(300, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                nextTurn();
+                repaint();
+            }
+
+        });
+
+        addKeyListener(new KeyListener() {
+            public void keyPressed(KeyEvent e) {
+                int key = e.getKeyCode();
+                // System.out.println("key pressed " + e.getKeyCode());
+                if (key == KeyEvent.VK_A) {
+                    getActivePiece().rotateLeft();
+                } else if (key == KeyEvent.VK_D) {
+                    getActivePiece().rotateRight();
+                } else if (key == KeyEvent.VK_LEFT) {
+                    getActivePiece().slide(-1);
+                } else if (key == KeyEvent.VK_RIGHT) {
+                    getActivePiece().slide(1);
+                }
+                alignActivePiece();
+                repaint();
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
+
+        timer.start();
     }
 
     private void initializeBoardStates() {
         this.boardStates = new int[rows][cols];
-    }
-
-    public void paintComponent(Graphics g) {
-        // clear the screen with black
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, getWidth(), getHeight());
-        this.activePiece.draw(g, SCALE);
-        for (Block b : this.settledBlocks) {
-            b.draw(g, SCALE);
-        }
     }
 
     public void nextTurn() {
