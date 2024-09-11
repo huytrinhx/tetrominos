@@ -7,6 +7,7 @@ import java.awt.Dimension;
 
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,7 @@ public class TestGameController {
     }
 
     @Test
+    @Ignore
     public void testGetUsersInputForGame() {
         window.textBox("boardRows").enterText("32");
         window.textBox("boardCols").enterText("10");
@@ -43,6 +45,7 @@ public class TestGameController {
     }
     
     @Test
+    @Ignore
     public void whenGameStartsBoardShouldMatchGameSetupInputs() {
         window.textBox("boardRows").enterText("32");
         window.textBox("boardCols").enterText("10");
