@@ -1,9 +1,9 @@
-package tetrominos;
+package tetrominos.models;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-class Block {
+public class Block {
 
     private Color color;
     private Position position;

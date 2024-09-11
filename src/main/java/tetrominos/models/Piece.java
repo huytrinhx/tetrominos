@@ -1,4 +1,4 @@
-package tetrominos;
+package tetrominos.models;
 
 import java.awt.Color;
 import java.awt.Graphics;

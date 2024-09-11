@@ -1,4 +1,4 @@
-package tetrominos;
+package tetrominos.models;
 
 public class Position {
 	//X coordinates corresponds to column index

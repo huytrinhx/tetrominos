@@ -1,23 +1,21 @@
-package tetrominos;
+package tetrominos.models;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.swing.Timer;
-import javax.swing.JFrame;
-import javax.swing.JComponent;
-import java.awt.event.*;
+public class Board {
+    private int width;
+    private int height;
 
-class Board extends JFrame {
+    public int getWidth() {
+        return width;
+    }
 
-    private static final int SCALE = 32; // number of pixels per square
-    private int cols;
-    private int rows;
+    public int getHeight() {
+        return height;
+    }
+
     private Piece activePiece;
-    private JComponent component;
 
     public Piece getActivePiece() {
         return activePiece;
@@ -56,76 +54,16 @@ class Board extends JFrame {
         this.settledBlocks = settledBlocks;
     }
 
-    public Board(int cols, int rows) {
-        super("Playing...");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.component = new JComponent() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                g.setColor(Color.BLACK);
-                g.fillRect(0, 0, getWidth(), getHeight());
-                Board.this.activePiece.draw(g, SCALE);
-                for (Block b : Board.this.settledBlocks) {
-                    b.draw(g, SCALE);
-                }
-            }
-        };
-        component.setPreferredSize(new Dimension(cols * SCALE, rows * SCALE));
-        setContentPane(component);
-        setLocationRelativeTo(null); // Center the frame
-        setLocation(getX() - (cols * SCALE) / 2, getY() - (rows * SCALE) / 2);
-        pack();
-        setResizable(true);
-        setVisible(true);
-
-        this.cols = cols;
-        this.rows = rows;
+    public Board(int width, int height) {
+        this.width = width;
+        this.height = height;
         initializeBoardStates();
         this.activePiece = new Piece();
         this.settledBlocks = new ArrayList<Block>();
-        startTimerAndListen();
-    }
-
-    private void startTimerAndListen() {
-        Timer timer = new Timer(300, new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                nextTurn();
-                repaint();
-            }
-
-        });
-
-        addKeyListener(new KeyListener() {
-            public void keyPressed(KeyEvent e) {
-                int key = e.getKeyCode();
-                // System.out.println("key pressed " + e.getKeyCode());
-                if (key == KeyEvent.VK_A) {
-                    getActivePiece().rotateLeft();
-                } else if (key == KeyEvent.VK_D) {
-                    getActivePiece().rotateRight();
-                } else if (key == KeyEvent.VK_LEFT) {
-                    getActivePiece().slide(-1);
-                } else if (key == KeyEvent.VK_RIGHT) {
-                    getActivePiece().slide(1);
-                }
-                alignActivePiece();
-                repaint();
-            }
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-        });
-
-        timer.start();
     }
 
     private void initializeBoardStates() {
-        this.boardStates = new int[rows][cols];
+        this.boardStates = new int[height][width];
     }
 
     public void nextTurn() {
@@ -158,7 +96,7 @@ class Board extends JFrame {
     }
 
     private void alignRight() {
-        while (this.activePiece.maxX > this.cols - 1) {
+        while (this.activePiece.maxX > this.width - 1) {
             this.activePiece.shift(-1, 0);
         }
     }
@@ -178,7 +116,7 @@ class Board extends JFrame {
             // Or the next row is already occupied (value = 1)
             int currentRow = b.getPosition().y;
             int currentCol = b.getPosition().x;
-            if (currentRow == this.rows - 1 || this.boardStates[currentRow + 1][currentCol] == 1) {
+            if (currentRow == this.height - 1 || this.boardStates[currentRow + 1][currentCol] == 1) {
                 System.out.println("Collision detected!");
                 return true;
             }
@@ -188,10 +126,10 @@ class Board extends JFrame {
 
     private List<Integer> getFullRow() {
         List<Integer> fullRowIndexes = new ArrayList<>();
-        for (int i = this.rows - 1; i > 0; i--) {
+        for (int i = this.height - 1; i > 0; i--) {
             int currentSum = Arrays.stream(this.boardStates[i]).sum();
             System.out.format("Row %d. Sum: %d \n", i, currentSum);
-            if (currentSum == this.cols) {
+            if (currentSum == this.width) {
                 fullRowIndexes.add(i);
             } else if (currentSum == 0) {
                 break;
@@ -231,8 +169,8 @@ class Board extends JFrame {
     }
 
     private void printBoardStates() {
-        for (int i = 0; i < this.rows; i++) {
-            for (int j = 0; j < this.cols; j++) {
+        for (int i = 0; i < this.height; i++) {
+            for (int j = 0; j < this.width; j++) {
                 System.out.format("%d,", this.boardStates[i][j]);
             }
             System.out.println("\n");
