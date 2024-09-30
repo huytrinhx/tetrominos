@@ -113,9 +113,41 @@ Once the settled blocks are updated, we update the BoardStates by filling 1 in c
 
 # Continuous Testing and Code Coverage
 * Writing tests
+
+I implemented test cases in this project using both Junit and Hamcrest style, primarily because I would like to see the flavor of each. Junit use assertTrue() while Hamcrest use assertThat() with matchers. Most of codes under model directory are tested using these frameworks.
+
+However, when it comes to testing the view, I come a across GuiActionRunner and FrameFixture from AssertJ to simulate the running of the view and actions by the users on the UI. For example, in TestGameController, I simulated the entry of board dimensions in the view and verified if the game controller registered those.
+
+Once the tests have been written, it should show under the Testing tab of VS Code all test classes as follows:
+
+![test-explorer](https://github.com/user-attachments/assets/e452353a-8527-4681-ba90-759d2eced490)
+
 * Setup GitHub Actions
+
+GitHub Actions are free tools by GitHub that can build and run the our codes based on an event (like pull requests, code changes). 
+
+In order to define the steps or workflows, we need to create a maven.yml (if using Maven as the package manager tool) file under the .github\workflows directory. In this yaml file, we start defining the when, where and what the workflows run and do. 
+
+For me in this project, I would like Github to run all test cases and send a report whenever there is a change in the main branch.
+
+Check out this [detailed Github documentation](https://docs.github.com/en/actions/writing-workflows/quickstart) for more in-depth understanding.
+
 * Adding Code Coverage
 
+Code coverage give visibility into how much our codes are covered by test cases. It's an useful indicator of code quality and I believe team should take care to prevent this number to go down when there're new enhancements.
+
+To use analyze code coverage locally in VSCode, we need to add JaCoCo as a dependency. Once set up, we should be able to run test cases with coverage. The tool will let us know where our test cases fall short of.
+
+![test-coverage](https://github.com/user-attachments/assets/748e4c8b-0cd7-4c56-b9d9-967831859507)
+
+To automate this at remote repo, we need to set up an account in app.codecov.io and follow the [instructions](https://docs.codecov.com/docs/quick-start.). Be sure to edit the github actions yml to push the run result to codecov in order for the new results to reflect in code cov.
+
+```
+name: Upload coverage to Codecov
+     uses: codecov/codecov-action@v4
+     env:
+         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+```
 # Future Developments
 * Design and implement a frontend and backend system for displaying gamer's scores and progresses
 * Design and implement a system to allow users to resume game upon launching the app
