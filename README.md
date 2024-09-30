@@ -1,8 +1,6 @@
 Current code coverage:
 [![codecov](https://codecov.io/github/huytrinhx/tetrominos/graph/badge.svg?token=VZF443AHJ1)](https://codecov.io/github/huytrinhx/tetrominos). [See detailed report](https://app.codecov.io/github/huytrinhx/tetrominos)
 
-![Tetris Board](https://private-user-images.githubusercontent.com/30612344/372223744-bc37c104-2892-4455-bb9d-08d9bb187dcf.png)
-
 
 # Table Of Contents
 + [Game Requirements](#game-requirements)
@@ -21,6 +19,8 @@ Current code coverage:
 
 # Game Requirements
 
+![Tetris Board](https://github.com/user-attachments/assets/bc37c104-2892-4455-bb9d-08d9bb187dcf)
+
 The basic rules of the game are the same as for the game [Tetris™](https://en.wikipedia.org/wiki/Tetris); you can easily find several browser-based implementations of Tetris with a web search. Following are summaries of major behaviors of our game:
 - The game starts with a falling piece, called a tetromino, until it reaches the bottom of the game board or collide with other fallen pieces.
 - Each tetromino is a shape composed of four blocks, each block orthogonal to each other, and should have same color.
@@ -33,6 +33,10 @@ Now we'll create the class diagram for the game. We will first design the classe
 
 We'll follow the bottom-up approach to designing the classes:
 - __Position__: a data structure to indicate where an object (block, piece) is in the game board. Since the pieces are falling downward from the top, we'll let the point of origin (0,0) to be on the top left corner, a typical convention in computer graphics. This data structure is defined by horizontal x  (column) and vertical y position (row). (Note: this convention is not the same as 2D matrix notation in most programming languages, where in a point, referred as P[x][y], x indicates the row and y indicates the column coordinates).
+
+![origin-convention](https://github.com/user-attachments/assets/a08a8912-c9e1-4e81-8800-9397786041ba)
+
+
 - __Block__: an object that is defined by a Position and a Color.
 - __Piece__: an object that contains 4 blocks. It can be slid left or right or down. Also, it can be rotated left (counter-clockwise) or right (clockwise).
 - __Board__: an object that is defined by Width, number of blocks that can be lined up horizontally, and Height, vertically.
@@ -48,6 +52,9 @@ We'll follow the bottom-up approach to designing the classes:
 - The Board class is composed Piece (active piece) and Block (settled blocks)
 - The Game Controller is composed of Board
 - The Game Controller has two-way association with GameView. Users enter keystrokes effects the piece and states of the game. The game reflects the new states visually on the view. 
+## Class Diagram
+
+![class-diagram](https://github.com/user-attachments/assets/e277e6ff-0c76-4a93-bac7-2cb714bf203f)
 
 # Test-Driven Development: Basic Tests
 
@@ -71,9 +78,12 @@ Any keyboards registered on GameSetup frame now correspond to a method or sequen
 
 1. Piece Generation
 
+![piece-generation](https://github.com/user-attachments/assets/1e2a1879-76f3-408c-8fc7-eaf812fc240a)
+
 Based on my research, there are 2 approaches to piece generation. The first approach is basically listing all possible basic shapes (4) of tetrominos: a T, a square, a Z and an L. Then we can add on different orientations (4) to the shape ( a 90-degree turn, 180-degree turn, 270-degree turn and a mirror). With 7 colors, we have in total more than 110 different combinations.
 
 I favor a more algorithmic approach. Based on the definition of a tetrominos, I represented a piece within a 4 by 4 matrix. To place the first block, I simply placed a block randomly on this matrix. All subsequent placements must be randomly chosen among 4 potential directions (north, south, west, east) to the last one and must be legal, not already chosen and not fall outside of our 4 by 4 matrix.
+
 
 2. Piece Rotation
 
@@ -84,6 +94,8 @@ To compensate this, before applying rotation, I move the piece so that its edges
 We are not done here, note that as we rotate left, because of the rotation occurred at the point of origin (0,0), our piece could fall out of the board if it currently has small x coordinates. To compensate for this, I add a method alignLeft() which makes sure a piece's minX could never be smaller than 0. Similarly, alignTop() and alignRight() should be applied when a piece's position could fall out of board after rotation.
 
 Now comes the rotation itself, I followed the matrix rotation formula as detailed in this [Wikipedia page](https://en.wikipedia.org/wiki/Rotation_matrix).
+
+![piece-rotation](https://github.com/user-attachments/assets/e8b4329f-92f7-4597-a7a2-7e6547b549dc)
 
 3. Rows Clearing
 
@@ -96,6 +108,8 @@ Therefore, after getting all the index of rows that are full, our clearing proce
 - Remove all blocks where y coordinates equals row index
 - Shift all the upper blocks down 1 block.
 Once the settled blocks are updated, we update the BoardStates by filling 1 in cells where the blocks are present.
+
+![row-clearance](https://github.com/user-attachments/assets/bd156d3b-fbbd-415e-9e21-ee1975123e17)
 
 # Continuous Testing and Code Coverage
 * Writing tests
