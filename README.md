@@ -1,6 +1,9 @@
 Current code coverage:
 [![codecov](https://codecov.io/github/huytrinhx/tetrominos/graph/badge.svg?token=VZF443AHJ1)](https://codecov.io/github/huytrinhx/tetrominos). [See detailed report](https://app.codecov.io/github/huytrinhx/tetrominos)
 
+![Tetris Board](https://private-user-images.githubusercontent.com/30612344/372223744-bc37c104-2892-4455-bb9d-08d9bb187dcf.png)
+
+
 # Table Of Contents
 + [Game Requirements](#game-requirements)
 + [Low-level Object Design](#low-level-object-design)
