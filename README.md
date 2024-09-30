@@ -154,3 +154,6 @@ name: Upload coverage to Codecov
 * Design and implement features to allow users customize game difficulty regarding speed
 
 # Resources
+- [Java Swing GUI Documentation](https://docs.oracle.com/javase/tutorial/uiswing/)
+- [Hamcrest Documentation](https://hamcrest.org/JavaHamcrest/)
+- [Model View Controller Pattern](https://www.youtube.com/watch?v=alQq5rh67nw)
